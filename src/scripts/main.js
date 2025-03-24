@@ -28,7 +28,6 @@ firstPromise
 const secondPromise = new Promise((resolve) => {
   const handler = () => {
     resolve('Second promise was resolved');
-    removeListeners();
   };
 
   document.addEventListener('click', handler, { once: true });
@@ -36,11 +35,6 @@ const secondPromise = new Promise((resolve) => {
   document.addEventListener('contextmenu', handler, {
     once: true,
   });
-
-  function removeListeners() {
-    document.removeEventListener('click', handler);
-    document.removeEventListener('contextmenu', handler);
-  }
 });
 
 secondPromise.then((message) => {
@@ -61,8 +55,6 @@ const thirdPromise = new Promise((resolve) => {
   function checkResolve() {
     if (leftClick && rightClick) {
       resolve('Third promise was resolved');
-      document.removeEventListener('click', onleftClick);
-      document.removeEventListener('contextmenu', onRightClick);
     }
   }
 
@@ -77,8 +69,8 @@ const thirdPromise = new Promise((resolve) => {
     checkResolve();
   }
 
-  document.addEventListener('click', onleftClick);
-  document.addEventListener('contextmenu', onRightClick);
+  document.addEventListener('click', onleftClick, { once: true });
+  document.addEventListener('contextmenu', onRightClick, { once: true });
 });
 
 thirdPromise.then((message) => {
